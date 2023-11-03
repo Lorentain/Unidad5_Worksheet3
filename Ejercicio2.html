@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>Juego del Ahorcado</h1>
+    <p id="palabraAdivinar"></p>
+    <p id="intentosRestantes">Intentos restantes: <span id="intentos">6</span></p>
+    <p>Letras adivinadas: <span id="letrasAdivinadas"></span></p>
+    <input type="text" id="adivinarLetra" maxlength="1">
+    <button onclick="adivinarLetra()">Adivinar letra</button>
+    <p id="resultado"></p>
+
+    <script>
+        const palabras = ["javascript", "programacion", "computadora", "tecnologia", "desarrollo"];
+        let palabraAdivinar = palabras[Math.floor(Math.random() * palabras.length)];
+        let palabraAdivinada = "_".repeat(palabraAdivinar.length);
+        let intentos = 6;
+        let letrasAdivinadas = "";
+    
+        const palabraAdivinarElement = document.getElementById("palabraAdivinar");
+        const intentosElement = document.getElementById("intentos");
+        const letrasAdivinadasElement = document.getElementById("letrasAdivinadas");
+        const resultadoElement = document.getElementById("resultado");
+    
+        palabraAdivinarElement.textContent = palabraAdivinada;
+    
+        function adivinarLetra() {
+          const letra = document.getElementById("adivinarLetra").value.toLowerCase();
+          if (letrasAdivinadas.includes(letra)) {
+            resultadoElement.textContent = "Ya has adivinado esa letra.";
+            return;
+          }
+    
+          letrasAdivinadas += letra;
+          letrasAdivinadasElement.textContent = letrasAdivinadas;
+    
+          if (palabraAdivinar.includes(letra)) {
+            for (let i = 0; i < palabraAdivinar.length; i++) {
+              if (palabraAdivinar[i] === letra) {
+                palabraAdivinada = palabraAdivinada.substring(0, i) + letra + palabraAdivinada.substring(i + 1);
+              }
+            }
+            palabraAdivinarElement.textContent = palabraAdivinada;
+            if (palabraAdivinada === palabraAdivinar) {
+              resultadoElement.textContent = "¡Has ganado! La palabra es: " + palabraAdivinar;
+            }
+          } else {
+            intentos--;
+            intentosElement.textContent = intentos;
+            if (intentos === 0) {
+              resultadoElement.textContent = "¡Has perdido! La palabra era: " + palabraAdivinar;
+            }
+          }
+    
+          document.getElementById("adivinarLetra").value = "";
+        }
+      </script>
+  
+    
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>Cronómetro</h1>
+    <div id="cronometro">0 minutos 0 segundos</div></div>
+    <div class="botones">
+        <button id="iniciar" class="btn">Iniciar</button>
+        <button id="detener" class="btn">Detener</button>
+        <button id="resetear" class="btn">Reiniciar</button>
+    </div>
+
+
+<script>
+
+    let tiempoTranscurrido = 0;
+    let cronometroFuncionando = false;
+    let intervalo;
+
+    const cronometro = document.getElementById("cronometro");
+    const iniciarBoton = document.getElementById("iniciar");
+    const detenerBoton = document.getElementById("detener");
+    const resetearBoton = document.getElementById("resetear");
+
+    function actualizarCronometro() {
+        const minutos = Math.floor(tiempoTranscurrido / 60);
+        const segundos = tiempoTranscurrido % 60;
+        tiempoTranscurrido++;
+        cronometro.textContent = minutos + " minutos " + segundos + " segundos";
+    }
+
+    iniciarBoton.addEventListener("click", function() {
+        if(!cronometroFuncionando) {
+            intervalo = setInterval(actualizarCronometro,1000);
+            cronometroFuncionando = true;
+        }
+    });
+
+    detenerBoton.addEventListener("click", function() {
+        if(cronometroFuncionando) {
+            clearInterval(intervalo);
+            cronometroFuncionando = false;
+        }
+    });
+
+    resetearBoton.addEventListener("click", function() {
+        clearInterval(intervalo);
+        tiempoTranscurrido = 0;
+        cronometro.textContent = "0 minutos 0 segundos";
+        cronometroFuncionando = false;
+    });
+
+</script>
+
+<style>
+    * {
+        box-sizing: border-box;
+        padding: 0;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-color: rgb(241, 137, 62);
+        color: #fff;
+    }
+    
+    h1 {
+        font-size: 60px;
+    }
+    
+    .botones {
+        margin-top: 20px;
+    }
+
+    .btn {
+        font-size: 35px;
+        margin: 0 20px;
+        background: transparent;
+        color: #fff;
+        border: 2px solid white;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    #cronometro {
+        font-size: 35px;
+        color: #fff;
+    }
+
+</style>
+    
+</body>
+</html>
