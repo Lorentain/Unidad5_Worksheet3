@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>JAVASCRIPT PAIRS GAME</h1>
+
+    <h3>CLICK ANY CARD TO BEGIN</h3>
+
+    <p id="temporizador">00:00</p>
+
+    <div class="contenedor-arriba">
+        <div class="cartas" id="0"><img src=""></div>
+        <div class="cartas" id="1"><img src=""></div>
+        <div class="cartas" id="2"><img src=""></div>
+        <div class="cartas" id="3"><img src=""></div>
+        <div class="cartas" id="4"><img src=""></div>
+    </div>
+
+    <div class="contenedor-abajo">
+        <div class="cartas" id="5"><img src=""></div>
+        <div class="cartas" id="6"><img src=""></div>
+        <div class="cartas" id="7"><img src=""></div>
+        <div class="cartas" id="8"><img src=""></div>
+        <div class="cartas" id="9"><img src=""></div>
+    </div>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+        }
+
+        body {
+            background: #82d2e4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .cartas {
+            background-color: #7d7d7d;
+            width: 150px;
+            height: 200px;
+            margin: 20px 20px;
+        }
+
+        .contenedor-abajo {
+            display: flex;
+        }
+
+        .contenedor-arriba {
+            display: flex;
+        }
+
+        .btn {
+            width: 180px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+    </style>
+
+    <script>
+      window.onload = () => {
+    var arrayCartas = ["./img/cartaamarilla.png", "./img/cartaamarilla.png", "./img/cartaazul.png", "./img/cartaazul.png",
+        "./img/cartamarron.png", "./img/cartamarron.png", "./img/cartamorada.png", "./img/cartamorada.png", "./img/cartaverde.png",
+        "./img/cartaverde.png"];
+
+    const cartas = document.querySelectorAll(".cartas");
+    const temporizadorElemento = document.getElementById('temporizador');
+
+    let indice = 0;
+    let comprobarCarta = null;
+    let segundos = 0;
+    let minutos = 0;
+    let temporizador;
+    let cartasAbiertas = [];
+
+    function actualizarTemporizador() {
+        segundos++;
+        if (segundos >= 60) {
+            segundos = 0;
+            minutos++;
+        }
+
+        const segundosFormateados = segundos < 10 ? '0' + segundos : segundos;
+        const minutosFormateados = minutos < 10 ? '0' + minutos : minutos;
+
+        temporizadorElemento.textContent = minutosFormateados + ':' + segundosFormateados;
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+
+    shuffleArray(arrayCartas);
+
+    cartas.forEach(carta => {
+        carta.addEventListener("click", (e) => {
+            const id = parseInt(e.target.id);
+            e.target.children[0].src = arrayCartas[id];
+            indice++;
+            cartasAbiertas.push(e.target);
+
+            if (indice === 2) {
+                if (comprobarCarta === arrayCartas[id]) {
+                    alert("Has acertado");
+
+                    if (temporizador) {
+                        clearInterval(temporizador);
+                        temporizador = null;
+                        segundos = -1;
+                        minutos = 0;
+                        actualizarTemporizador();
+                    }
+
+                    cartasAbiertas.forEach(cartaAbierta => {
+                        setTimeout(() => {
+                            cartaAbierta.children[0].src = "";
+                        }, 1000);
+                    });
+
+                    cartasAbiertas = [];
+                } else {
+                    cartasAbiertas.forEach(cartaAbierta => {
+                        setTimeout(() => {
+                            cartaAbierta.children[0].src = "";
+                        }, 1000);
+                    });
+
+                    cartasAbiertas = [];
+                }
+                indice = 0;
+            }
+
+            if (!temporizador) {
+                temporizador = setInterval(actualizarTemporizador, 1000);
+            }
+
+            comprobarCarta = arrayCartas[id];
+        });
+    });
+};
+    </script>
+    
+</body>
+</html>
